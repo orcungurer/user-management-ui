@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import { StyledButton } from "./Button.style";
 
 interface ButtonProps {
   type?: "button" | "submit";
@@ -6,48 +6,10 @@ interface ButtonProps {
   className?: string;
   onClick?: () => void;
   outline?: boolean;
+  isFirst?: boolean;
+  isLast?: boolean;
   disabled?: boolean;
 }
-
-const StyledButton = styled.button<{ $outline?: boolean }>`
-  font-size: 0.8rem;
-  border-radius: 0.25rem;
-  padding: 0.5rem 0.65rem;
-  cursor: pointer;
-  border: 1px solid;
-  transition: all 0.2s ease;
-
-  ${({ $outline }) =>
-    $outline
-      ? css`
-          background-color: transparent;
-          color: #333;
-          border-color: #333;
-
-          &:hover,
-          &:active {
-            background-color: #333;
-            color: #fff;
-          }
-        `
-      : css`
-          background-color: #333;
-          color: #fff;
-          border-color: #333;
-
-          &:hover,
-          &:active {
-            background-color: #000;
-          }
-        `}
-
-  &:disabled {
-    color: #333;
-    background-color: #d2d2d2;
-    border-color: #d2d2d2;
-    cursor: default;
-  }
-`;
 
 const Button: React.FC<ButtonProps> = ({
   type = "button",
@@ -55,6 +17,8 @@ const Button: React.FC<ButtonProps> = ({
   className,
   onClick,
   outline,
+  isFirst,
+  isLast,
   disabled,
 }) => {
   return (
@@ -63,6 +27,8 @@ const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       className={className}
       $outline={outline}
+      $isFirst={isFirst}
+      $isLast={isLast}
       disabled={disabled}
     >
       {children}
