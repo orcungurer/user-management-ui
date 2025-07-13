@@ -57,3 +57,10 @@ export const StyledButton = styled.button<{
     cursor: default;
   }
 `;
+
+export const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  gap: 0.5rem;
+`;

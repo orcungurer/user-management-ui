@@ -5,7 +5,9 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  password?: string;
   role: "Superuser" | "Admin" | "User";
+  active?: boolean;
   createdAt: string;
   location: {
     lat: number;

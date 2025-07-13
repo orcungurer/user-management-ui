@@ -1,4 +1,4 @@
-import { StyledButton } from "./Button.style";
+import { StyledButton } from "./Button.styles";
 
 interface ButtonProps {
   type?: "button" | "submit";
