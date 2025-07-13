@@ -1,10 +1,29 @@
 import { generateFakeUsers, User } from "@/lib/generateUsers";
 import { useEffect, useState } from "react";
-
-const LOCAL_STORAGE_KEY = "users";
+import Table from "../table/Table";
+import Pagination from "../pagination/Pagination";
+import { ITEMS_PER_PAGE } from "@/constants/pagination";
+import Filters from "../filters/Filters";
+import { ActionsContainer, Title, Container } from "./Users.styles";
+import { LOCAL_STORAGE_KEY } from "@/constants/constants";
 
 const Users = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [searchUser, setSearchUser] = useState("");
+  const [role, setRole] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const filteredUsers = users.filter((user) => {
+    return (
+      user.name.toLowerCase().includes(searchUser.toLowerCase()) &&
+      (role ? user.role === role : true)
+    );
+  });
+
+  const paginatedUsers = filteredUsers.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   useEffect(() => {
     const storedUsers = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -19,24 +38,24 @@ const Users = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Users</h1>
-      {users.length > 0 ? (
-        <ul>
-          {users.map((user) => (
-            <li key={user.id}>
-              <strong>Name:</strong> {user.name} - {" "}
-              <strong>Email:</strong> {user.email} - {" "}
-              <strong>Role:</strong> {user.role} - {" "}
-              <strong>Date:</strong> {new Date(user.createdAt).toLocaleDateString()} - {" "}
-              <strong>Location:</strong> {user.location.lat}, {user.location.lng}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No users found.</p>
-      )}
-    </div>
+    <Container>
+      <Title>Users</Title>
+      <ActionsContainer>
+        <Filters
+          onFilter={(searchUser, selectedRole) => {
+            setSearchUser(searchUser);
+            setRole(selectedRole);
+          }}
+          setCurrentPage={setCurrentPage}
+        />
+      </ActionsContainer>
+      <Table users={paginatedUsers} />
+      <Pagination
+        totalItems={filteredUsers.length}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
+    </Container>
   );
 };
 
