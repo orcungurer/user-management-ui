@@ -15,7 +15,7 @@ export interface User {
 
 const roles: User["role"][] = ["Superuser", "Admin", "User"];
 
-export const generateFakeUsers = (count: number = 10): User[] => {
+export const generateFakeUsers = (count: number = 5000): User[] => {
   const users: User[] = [];
 
   for (let i = 0; i < count; i++) {
