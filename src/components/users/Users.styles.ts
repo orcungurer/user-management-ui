@@ -17,3 +17,8 @@ export const ActionsContainer = styled.div`
   align-items: center;
   margin-bottom: 0.5rem;
 `;
+
+export const ToggleButtons = styled.div`
+  display: flex;
+  gap: 0.5rem;
+`;
