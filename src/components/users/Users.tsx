@@ -14,6 +14,8 @@ import { LOCAL_STORAGE_KEY } from "@/constants/constants";
 import Button from "../ui/button/Button";
 import ToggleGroup from "../ui/toggle-group/ToggleGroup";
 import CardList from "../card-list/CardList";
+import Modal from "../ui/modal/Modal";
+import AddUserForm from "../add-user-form/AddUserForm";
 
 const Users = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -22,6 +24,7 @@ const Users = () => {
   const [view, setView] = useState<"table" | "card">("table");
   const [list, setList] = useState<"paginated" | "all">("paginated");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const filteredUsers = users.filter((user) => {
     return (
@@ -53,6 +56,14 @@ const Users = () => {
     setCurrentPage(1);
   }, [list]);
 
+  const addUserHandler = (newUser: User) => {
+    const updatedUsers = [...users, newUser];
+    setUsers(updatedUsers);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedUsers));
+    setIsModalOpen(false);
+    setCurrentPage(1);
+  };
+
   return (
     <Container>
       <Title>Users</Title>
@@ -76,7 +87,7 @@ const Users = () => {
             onClick={setList}
           />
         </ToggleButtons>
-        <Button>Add New User</Button>
+        <Button onClick={() => setIsModalOpen(true)}>Add New User</Button>
       </ActionsContainer>
       {view === "table" && <Table users={visibleUsers} />}
       {view === "card" && <CardList users={visibleUsers} />}
@@ -86,6 +97,15 @@ const Users = () => {
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
         />
+      )}
+
+      {isModalOpen && (
+        <Modal onClose={() => setIsModalOpen(false)}>
+          <AddUserForm
+            onAddUser={addUserHandler}
+            onClose={() => setIsModalOpen(false)}
+          />
+        </Modal>
       )}
     </Container>
   );
